@@ -4,43 +4,46 @@
 
 using namespace std;
 
-void bubbleSort(int arr[], int n)
+void bubble_sort(int arg_array[], int n)
 {
-    int i, j;
-    bool swapped;
-    for (i = 0; i < n - 1; i++) {
-        swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-                swapped = true;
+    bool isSwapped;
+    for (int i = 0; i < n - 1; i++) {
+        isSwapped = false;
+
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arg_array[j] > arg_array[j + 1]) {
+                swap(arg_array[j], arg_array[j + 1]);
+                isSwapped = true;
             }
         }
-  
-        // If no two elements were swapped
-        // by inner loop, then break
-        if (swapped == false)
+        if (isSwapped == false)
             break;
     }
 }
 
 int main() {
     int arraySize; 
-    string userInput; 
     
+    // Receives user input for size of list 
+    cout << "Please enter list size: "; 
     cin >> arraySize;
 
     int array[arraySize];
 
+    // Recieves user input for contents of list
+    cout << "Please enter contents of list: "; 
     for (int i = 0; i < arraySize; i++) {
         cin >> array[i]; 
     }
 
+    bubble_sort(array, arraySize);
+
+    // Print sorted array
+    cout << "Sorted array: "; 
     for (int i = 0; i < arraySize; i++) {
-        cout << array[i]; 
-        cout << " "; 
-    }
-    
+        cout << " " <<  array[i]; 
+    } 
+    cout << endl; 
 
      return 0; 
 }
