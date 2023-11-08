@@ -22,16 +22,17 @@ private:
 
 public:
 	node* root;
+    string str; 
 	BinarySearchTree()
 	{
 		root = NULL;
 	}
 	bool isEmpty() const { return root == NULL; }
     void TREE_INSERT(int );
-	void INORDER_TREE_WALK(node*);
-    void POSTORDER_TREE_WALK(node*);
-    void PREORDER_TREE_WALK(node*);
-    void LEVELORDER_TREE_WALK(node*);
+	string INORDER_TREE_WALK(node*, int );
+    string POSTORDER_TREE_WALK(node*, int );
+    string PREORDER_TREE_WALK(node*, int ) ;
+    string LEVELORDER_TREE_WALK(node*, int );
     void DELETE(int );
     bool contains(int ); 
 
@@ -82,34 +83,54 @@ void BinarySearchTree::TREE_INSERT(int d)
 		
 }
 
-void BinarySearchTree::INORDER_TREE_WALK(node* x)
+string BinarySearchTree::INORDER_TREE_WALK(node* x, int i)
 {
-    string str = "";
+    // Ensures initialization occurs once
+    if(i == 0) 
+        str = "";
+    
 	if (x != NULL)
 	{
-		if (x->left) INORDER_TREE_WALK(x->left);
-		    cout << x->key << " ";
-		if (x->right) INORDER_TREE_WALK(x->right);
+		if (x->left) INORDER_TREE_WALK(x->left, 1);
+		    str.append(to_string(x->key)); 
+            str.append(" ");
+		if (x->right) INORDER_TREE_WALK(x->right, 1);
 	}
+    return str; 
 }
 
-void BinarySearchTree::POSTORDER_TREE_WALK(node* x) {
+string BinarySearchTree::POSTORDER_TREE_WALK(node* x, int i) {
+
+    // Ensures initialization occurs once
+    if(i == 0) 
+        str = "";
+
     if (x != NULL) {
-        if (x->left) POSTORDER_TREE_WALK(x->left);
-        if (x->right) POSTORDER_TREE_WALK(x->right);
-        cout << x->key << " ";
+        if (x->left) POSTORDER_TREE_WALK(x->left, 1);
+        if (x->right) POSTORDER_TREE_WALK(x->right, 1);
+            str.append(to_string(x->key)); 
+            str.append(" ");
     }
+    return str; 
 }
 
-void BinarySearchTree::PREORDER_TREE_WALK(node* x) {
+string BinarySearchTree::PREORDER_TREE_WALK(node* x, int i) {
+
+    // Ensures initialization occurs once
+    if(i == 0) 
+        str = "";
+
     if (x != NULL) {
-        cout << x->key << " ";
-        if (x->left) PREORDER_TREE_WALK(x->left);
-        if (x->right) PREORDER_TREE_WALK(x->right);
+            str.append(to_string(x->key)); 
+            str.append(" ");
+        if (x->left) PREORDER_TREE_WALK(x->left, 1);
+        if (x->right) PREORDER_TREE_WALK(x->right, 1);
     }
+    return str; 
 }
 
-void BinarySearchTree::LEVELORDER_TREE_WALK(node* x) {
+string BinarySearchTree::LEVELORDER_TREE_WALK(node* x, int i) {
+    str = "";
     if (x != NULL) {
     
         queue<node*> q;
@@ -119,7 +140,8 @@ void BinarySearchTree::LEVELORDER_TREE_WALK(node* x) {
          
         // Print front of queue and remove it from queue
             node* temp = q.front();
-            cout << temp->key << " ";
+                str.append(to_string(temp->key)); 
+                str.append(" ");
             q.pop();
  
         // Enqueue left child
@@ -131,6 +153,7 @@ void BinarySearchTree::LEVELORDER_TREE_WALK(node* x) {
                 q.push(temp->right);
         }
     }
+    return str; 
 }
 
 bool BinarySearchTree::contains (int n) {
@@ -147,7 +170,6 @@ void BinarySearchTree::DELETE (int n) {
     x = SEARCH(n);
     
     if(x == NULL) {
-        cout << "Key not in list ";
         return;
     }
     
@@ -231,93 +253,13 @@ void BinarySearchTree::DELETE (int n) {
         }
     }
 }
-/*
-int main()
-{
-	BinarySearchTree bst;
-	int choice, key;
-    int choice2; // Im not very creative with names
-    int number;
-    int k;
-    string name;
-    bool case10 = true;
-    
-	while (true)
-	{
-		cout << endl << endl;
-		cout << " Binary Search Tree Example " << endl;
-		cout << " ----------------------------- " << endl;
-		cout << " 1. Insertion " << endl;
-		cout << " 2. In-Order Traversal " << endl;
-        cout << " 3. Post-Order Traversal " << endl;
-        cout << " 4. Pre-Order Traversal " << endl;
-        cout << " 5. Find Minimum " << endl;
-        cout << " 6. Find Maximum " << endl;
-        cout << " 7. Find Successor " << endl;
-        cout << " 8. Delete " << endl;
-        cout << " 9. Remove Min " << endl;
-        cout << " 10. Enter Flight Time Simulator " << endl;
-		cout << " 11. Exit " << endl;
-        cout << " 12. Level Order "  << endl; 
-        cout << " 13. Search "  << endl; 
-        cout << " Enter your choice : ";
-		cin >> choice;
-		switch (choice)
-        {
-            case 1: cout << " Enter key (int value) to be inserted : ";
-                cin >> key;
-                bst.TREE_INSERT(key);
-                break;
-            case 2: cout << endl;
-                cout << " In-Order Traversal " << endl;
-                cout << " -------------------" << endl;
-                bst.INORDER_TREE_WALK(bst.root);
-                break;
-            case 3:
-                cout << " Post-Order Traversal " << endl;
-                cout << " -------------------" << endl;
-                bst.POSTORDER_TREE_WALK(bst.root);
-                break;
-            case 4:
-                cout << " Pre-Order Traversal " << endl;
-                cout << " -------------------" << endl;
-                bst.PREORDER_TREE_WALK(bst.root);
-                break;
-            case 8:
-                cout << " Enter key (int value) that you would like to delete :  ";
-                cin >> key;
-                bst.DELETE(key);
-                cout << " Deleted " << endl;
-                cout << " -------" << endl;
-                break;
-		case 11: system("pause");
-			return 0;
-			break;
-        case 12: 
-            cout << " Level-Order Traversal " << endl;
-            cout << " -------------------" << endl;
-            bst.LEVELORDER_TREE_WALK(bst.root);
-            break;
-        case 13: 
-            cout << " Enter key (int value) that you would like to search :  ";
-                cin >> key;
-                if(bst.contains(key) == 1)
-                    cout << "True" << endl; 
-                else 
-                    cout << "False" << endl;
-            break; 
-		default:
-			cout << "Invalid choice";
-		}
-	}
-} */
 
 int main() {
     BinarySearchTree bst;
     string numberString = ""; 
     int n = 0; 
+    string query[10000]; 
 
-    cout << "Enter queries:" << endl;
     cin >> numberString; 
     string numstr = "";
     for (int j = 0; j < numberString.size(); j++) {
@@ -329,7 +271,6 @@ int main() {
     n = stoi(numstr); 
    
     //numstr = "";
-    cout << endl;
 
     string input = ""; 
     string input_parsed = ""; 
@@ -337,6 +278,8 @@ int main() {
     int size = 0; // size of outputs that require array storage 
     int num = 0; 
     string num_string = "";
+
+    // Traverses through loop n times, or number of queries
 
     for (int i = 0; i < n + 1; i++) {
         input = "";
@@ -351,20 +294,36 @@ int main() {
 
         // INSERT 
         if (input_parsed == "INSER") {
+            bool neg = false; 
+
             for (int j = 0; j < input.size(); j++) {
                 if(isdigit(input[j]))
                     num_string += input[j];
+                if(input[j] == '-')
+                    neg = true; 
             }
             num = stoi(num_string); 
+
+            if(neg)
+                num = -1* num; 
             bst.TREE_INSERT(num);
+
         }
         // DELETE 
         else if (input_parsed == "DELET") {
+            bool neg = false; 
+
             for (int j = 0; j < input.size(); j++) {
                 if(isdigit(input[j]))
                     num_string += input[j];
+                if(input[j] == '-')
+                    neg = true; 
             }
             num = stoi(num_string); 
+
+            if(neg)
+                num = -1* num; 
+
             bst.DELETE(num);
         }
 
@@ -372,31 +331,54 @@ int main() {
 
         // SEARCH
         else if (input_parsed == "SEARC") {
+            bool neg = false; 
+
             for (int j = 0; j < input.size(); j++) {
                 if(isdigit(input[j]))
                     num_string += input[j];
+                if(input[j] == '-')
+                    neg = true; 
             }
             num = stoi(num_string); 
+
+            if(neg)
+                num = -1* num; 
+
             if (bst.contains(num) == 1)
-                cout << "True" << endl;
+                query[size] = "True"; 
             else 
-                cout << "False" << endl;
+                query[size] = "False"; 
+
+            size++;     
+        // IN ORDER
         }
         else if (input_parsed == "INORD") {
-            bst.INORDER_TREE_WALK(bst.root);
+            query[size] = bst.INORDER_TREE_WALK(bst.root, 0);
+            size++; 
+
+        // PRE ORDER
         }
         else if (input_parsed == "PREOR") {
-            bst.PREORDER_TREE_WALK(bst.root);
+            query[size] = bst.PREORDER_TREE_WALK(bst.root, 0);
+            size++; 
         }
+
+        // POST ORDER
         else if (input_parsed == "POSTO") {
-            bst.POSTORDER_TREE_WALK(bst.root);
+            query[size] = bst.POSTORDER_TREE_WALK(bst.root, 0);
+            size++; 
+
+        // LEVEL ORDER
         }
         else if (input_parsed == "LEVEL") {
-            bst.LEVELORDER_TREE_WALK(bst.root);
+            query[size] = bst.LEVELORDER_TREE_WALK(bst.root, 0);
+            size++; 
         }
-        else {
-            
-        }
+        else {}
+    }
+
+    for(int i = 0; i <= size; i++) {
+        cout << query[i] << endl;
     }
     return 0; 
 }
