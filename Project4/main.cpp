@@ -23,6 +23,8 @@ private:
 public:
 	node* root;
     string str; 
+    int arr[1000];
+    int c;
 	BinarySearchTree()
 	{
 		root = NULL;
@@ -34,7 +36,7 @@ public:
     string PREORDER_TREE_WALK(node*, int ) ;
     string LEVELORDER_TREE_WALK(node*, int );
     void DELETE(int );
-    bool contains(int ); 
+    bool contains(node* , int , int ); 
 
     node* SEARCH(int n) {
         node* x = root;
@@ -104,6 +106,7 @@ string BinarySearchTree::POSTORDER_TREE_WALK(node* x, int i) {
     // Ensures initialization occurs once
     if(i == 0) 
         str = "";
+        
 
     if (x != NULL) {
         if (x->left) POSTORDER_TREE_WALK(x->left, 1);
@@ -156,22 +159,40 @@ string BinarySearchTree::LEVELORDER_TREE_WALK(node* x, int i) {
     return str; 
 }
 
-bool BinarySearchTree::contains (int n) {
-    if(SEARCH(n) != NULL) 
-        return true;
-    else 
-        return false; 
+bool BinarySearchTree::contains (node* x, int n, int i) {
+    if(i == 0) {
+        for(int i = 0; i < 1000; i++) {
+            arr[i] = 0; 
+        }
+        c = 0; 
+    }
+    
+	if (x != NULL)
+	{
+		if (x->left) contains(x->left, n, 1);
+		    arr[c] = x->key; 
+            c++; 
+		if (x->right) contains(x->right, n, 1);
+	}
+    else {
+    for(int i = 0; i <= c; i++) {
+        if (arr[c] == n)
+            return true;
+    }
+    return false; 
+    }
 }
 
 void BinarySearchTree::DELETE (int n) {
     node* x = root;
     node* parent = nullptr;
+    bool exists; 
+
+    exists = contains(x, n, 0); 
     
-    x = SEARCH(n);
+    if(exists) {
+       
     
-    if(x == NULL) {
-        return;
-    }
     
     parent = x->parent;
     
@@ -252,6 +273,7 @@ void BinarySearchTree::DELETE (int n) {
                 root = y;
         }
     }
+    }
 }
 
 int main() {
@@ -268,7 +290,7 @@ int main() {
         }
 
         
-    n = stoi(numstr); 
+    n = stoi(numberString); 
    
     //numstr = "";
 
@@ -280,6 +302,10 @@ int main() {
     string num_string = "";
 
     // Traverses through loop n times, or number of queries
+    if(n == 0) {
+        cout << "\n"; 
+        return 0; 
+    }
 
     for (int i = 0; i < n + 1; i++) {
         input = "";
@@ -306,6 +332,7 @@ int main() {
 
             if(neg)
                 num = -1* num; 
+
             bst.TREE_INSERT(num);
 
         }
@@ -344,7 +371,7 @@ int main() {
             if(neg)
                 num = -1* num; 
 
-            if (bst.contains(num) == 1)
+            if (bst.contains(bst.root, num, 0) == 1)
                 query[size] = "True"; 
             else 
                 query[size] = "False"; 
@@ -378,7 +405,7 @@ int main() {
     }
 
     for(int i = 0; i <= size; i++) {
-        cout << query[i] << endl;
+        cout << "\n" << query[i];
     }
     return 0; 
 }
